@@ -5,7 +5,10 @@ import { UserService } from 'service/user';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-	constructor(private reflector: Reflector, private userService: UserService) {}
+	constructor(
+		private reflector: Reflector,
+		private userService: UserService,
+	) {}
 
 	public async canActivate(context: ExecutionContext): Promise<boolean> {
 		const req = context.switchToHttp().getRequest();

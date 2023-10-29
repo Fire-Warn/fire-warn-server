@@ -17,3 +17,19 @@ export class UserResponse {
 	@ApiProperty({ enum: UserRole, enumName: 'UserRole' })
 	role: UserRole;
 }
+
+export class ListResponse {
+	@ApiProperty()
+	page: number;
+
+	@ApiProperty()
+	rowsPerPage: number;
+
+	@ApiProperty()
+	total: number;
+}
+
+export class UserListResponse extends ListResponse {
+	@ApiProperty({ isArray: true, type: UserResponse })
+	list: Array<UserResponse>;
+}

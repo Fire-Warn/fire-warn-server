@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserResponse } from 'interface/apiResponse';
+import { UserListResponse, UserResponse } from 'interface/apiResponse';
 import { User } from 'model';
+import { PaginationResponse } from 'value_object';
 
 @Injectable()
 export class UserFormatter {
@@ -12,6 +13,15 @@ export class UserFormatter {
 			firstName: user.firstName,
 			lastName: user.lastName,
 			role: user.role,
+		};
+	}
+
+	public toUserListResponse(userPaginationResponse: PaginationResponse<User>): UserListResponse {
+		return {
+			list: userPaginationResponse.list.map(user => this.toUserResponse(user)),
+			page: userPaginationResponse.page,
+			rowsPerPage: userPaginationResponse.rowsPerPage,
+			total: userPaginationResponse.total,
 		};
 	}
 }

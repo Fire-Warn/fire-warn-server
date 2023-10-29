@@ -12,6 +12,8 @@ import {
 	AdminConfirmSignUpCommandInput,
 	AdminConfirmSignUpCommand,
 	AttributeType,
+	AdminCreateUserCommandInput,
+	AdminCreateUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 import { CognitoConfig, AWSConfig } from 'config/interfaces';
@@ -103,6 +105,21 @@ export class AuthService {
 		};
 
 		const command = new AdminConfirmSignUpCommand(input);
+		await this.client.send(command);
+	}
+
+	public async createAccount(email: string): Promise<void> {
+		const input: AdminCreateUserCommandInput = {
+			UserPoolId: this.cognitoConfig.userPoolId,
+			Username: email, // TODO: Change to email
+			UserAttributes: [
+				{ Name: 'email_verified', Value: 'true' },
+				{ Name: 'email', Value: email },
+			],
+			MessageAction: 'RESEND',
+		};
+
+		const command = new AdminCreateUserCommand(input);
 		await this.client.send(command);
 	}
 }
