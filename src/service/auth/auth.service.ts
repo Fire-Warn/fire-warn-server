@@ -109,7 +109,6 @@ export class AuthService {
 	}
 
 	public async createAccount(email: string): Promise<void> {
-		console.log({ email });
 		const input: AdminCreateUserCommandInput = {
 			UserPoolId: this.cognitoConfig.userPoolId,
 			Username: email, // TODO: Change to email

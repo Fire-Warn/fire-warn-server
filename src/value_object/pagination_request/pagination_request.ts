@@ -23,7 +23,6 @@ export abstract class PaginationRequest<T> {
 		public readonly order: Order = Order.Desc,
 		public readonly orderBy?: T,
 	) {
-		console.log({ page, rowsPerPage });
 		if (rowsPerPage > PaginationRequest.MAX_ROWS_PER_PAGE) {
 			throw new MaxRowsPerPageError();
 		}
