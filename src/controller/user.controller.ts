@@ -3,7 +3,6 @@ import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserRequest, Order, UserListOrderBy } from 'interface/apiRequest';
 import { UserListResponse, UserResponse } from 'interface/apiResponse';
-import { AuthService } from 'service/auth';
 import { UserFormatter, UserService } from 'service/user';
 import { Auth, RequestingUser } from 'shared/decorator';
 import { User } from 'model';
@@ -14,7 +13,6 @@ import { UserPaginationRequest } from 'value_object/pagination_request';
 @ApiTags('User')
 export class UserController {
 	constructor(
-		private readonly authService: AuthService,
 		private readonly userService: UserService,
 		private readonly userFormatter: UserFormatter,
 	) {}
