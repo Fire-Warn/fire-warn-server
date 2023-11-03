@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SystemModule, UserModule } from './module';
+import { SystemModule, UserModule, LocalityModule } from './module';
 import configuration from 'config/configuration';
 import dbConfig from 'config/db.config';
 import { DatabaseConfig } from 'config/interfaces';
@@ -17,6 +17,7 @@ import { DatabaseConfig } from 'config/interfaces';
 		TypeOrmModule.forRoot(dbConfig() as DatabaseConfig),
 		SystemModule,
 		UserModule,
+		LocalityModule,
 	],
 })
 export class AppModule {}

@@ -116,7 +116,6 @@ export class AuthService {
 				{ Name: 'email_verified', Value: 'true' },
 				{ Name: 'email', Value: email },
 			],
-			MessageAction: 'RESEND',
 		};
 
 		const command = new AdminCreateUserCommand(input);

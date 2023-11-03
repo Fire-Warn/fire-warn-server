@@ -60,6 +60,9 @@ export class UserRepository {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				role: user.role,
+				phone: user.phone,
+				regionId: user.regionId,
+				communityId: user.communityId,
 			})
 			.execute();
 

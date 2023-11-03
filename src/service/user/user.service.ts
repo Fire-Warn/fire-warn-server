@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { generate } from 'generate-password';
 
 import { UserRepository } from 'repository';
-import { User } from 'model';
+import { Community, Region, User } from 'model';
 import { AuthService } from 'service/auth';
+import { LocalityService } from 'service/locality';
 import { CreateUserRequest, RegisterUserRequest } from 'interface/apiRequest';
 import { UserRole } from 'entity/user.entity';
 import { Result } from 'shared/util/util';
@@ -17,11 +18,18 @@ export interface UserRestrictionFields {
 	communityId: number;
 }
 
+export interface UserPaginationItem {
+	user: User;
+	region: Region;
+	community: Community;
+}
+
 @Injectable()
 export class UserService {
 	constructor(
 		private readonly userRepository: UserRepository,
 		private readonly authService: AuthService,
+		private readonly localityService: LocalityService,
 	) {}
 
 	public async getById(id: number): Promise<User> {
@@ -143,14 +151,29 @@ export class UserService {
 		return user;
 	}
 
-	public async getAllUsers(paginationRequest: UserPaginationRequest): Promise<PaginationResponse<User>> {
+	public async getAllUsers(paginationRequest: UserPaginationRequest): Promise<PaginationResponse<UserPaginationItem>> {
 		const userPaginationResponse = await this.userRepository.getAllUsers(paginationRequest);
 
-		return new PaginationResponse<User>(
+		const regionIds = Array.from(new Set(userPaginationResponse.list.map(u => u.regionId)));
+		const communityIds = Array.from(new Set(userPaginationResponse.list.map(u => u.communityId)));
+
+		const regions = await this.localityService.getRegionByIds(regionIds);
+		const communities = await this.localityService.getCommunityByIds(communityIds);
+
+		return new PaginationResponse<UserPaginationItem>(
 			paginationRequest.page,
 			paginationRequest.rowsPerPage,
 			userPaginationResponse.total,
-			userPaginationResponse.list,
+			userPaginationResponse.list.map(user => {
+				const region = regions.find(r => r.id === user.regionId) as Region;
+				const community = communities.find(c => c.id === user.communityId) as Community;
+
+				return {
+					user,
+					region,
+					community,
+				};
+			}),
 		);
 	}
 }

@@ -27,7 +27,7 @@ export abstract class PaginationRequest<T> {
 			throw new MaxRowsPerPageError();
 		}
 
-		if (page < 1) {
+		if (page < 0) {
 			throw new WrongPageNumberError();
 		}
 
