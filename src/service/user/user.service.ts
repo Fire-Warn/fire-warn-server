@@ -112,7 +112,7 @@ export class UserService {
 			case UserRole.RegionalAdmin:
 				if (
 					[UserRole.Admin, UserRole.RegionalAdmin].includes(managedUser.role) ||
-					([UserRole.CommunityAdmin || UserRole.Volunteer].includes(managedUser.role) &&
+					([UserRole.CommunityAdmin || UserRole.Volunteer || UserRole.Operator].includes(managedUser.role) &&
 						currentUser.regionId !== managedUser.regionId)
 				) {
 					throw new MissingRolePermissionsError();
@@ -120,7 +120,9 @@ export class UserService {
 				break;
 			case UserRole.CommunityAdmin:
 				if (
-					[UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin].includes(managedUser.role) ||
+					[UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin, UserRole.Operator].includes(
+						managedUser.role,
+					) ||
 					(managedUser.role === UserRole.Volunteer && currentUser.regionId !== managedUser.regionId)
 				) {
 					throw new MissingRolePermissionsError();
@@ -128,6 +130,9 @@ export class UserService {
 				break;
 			case UserRole.Volunteer:
 				// Volunteer can't manage any users
+				throw new MissingRolePermissionsError();
+			case UserRole.Operator:
+				// Operator can't manage any users
 				throw new MissingRolePermissionsError();
 		}
 	}

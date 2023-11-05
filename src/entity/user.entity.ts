@@ -7,6 +7,7 @@ export enum UserRole {
 	RegionalAdmin = 'RegionalAdmin',
 	CommunityAdmin = 'CommunityAdmin',
 	Volunteer = 'Volunteer',
+	Operator = 'Operator',
 }
 
 @Entity('user')
