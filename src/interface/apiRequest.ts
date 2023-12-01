@@ -60,3 +60,7 @@ export enum UserListOrderBy {
 	CreatedAt = 'user.created_at',
 	Role = 'user.role',
 }
+
+export enum IncidentListOrderBy {
+	CreatedAt = 'incident.created_at',
+}

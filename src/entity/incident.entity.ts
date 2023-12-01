@@ -20,6 +20,9 @@ export class IncidentEntity {
 	@Column()
 	address: string;
 
+	@Column()
+	description: string;
+
 	@CreateDateColumn({
 		name: 'created_at',
 	})
