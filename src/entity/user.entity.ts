@@ -87,4 +87,7 @@ export class UserEntity {
 
 	@OneToMany(() => CallEntity, call => call.user, { cascade: true })
 	calls: CallEntity[];
+
+	@OneToMany(() => IncidentEntity, incident => incident.createdUser, { cascade: true })
+	incidents: IncidentEntity[];
 }

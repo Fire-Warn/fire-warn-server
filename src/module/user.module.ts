@@ -4,6 +4,7 @@ import { UserController } from 'controller';
 import { AuthService } from 'service/auth';
 import { UserService, UserFormatter } from 'service/user';
 import { LocalityFormatter, LocalityService } from 'service/locality';
+import { PermissionsService } from 'service/permissions';
 import { CommunityRepository, RegionRepository, UserRepository } from 'repository';
 import { AuthModule } from './auth.module';
 
@@ -19,6 +20,7 @@ import { AuthModule } from './auth.module';
 		LocalityFormatter,
 		RegionRepository,
 		CommunityRepository,
+		PermissionsService,
 	],
 })
 export class UserModule {}

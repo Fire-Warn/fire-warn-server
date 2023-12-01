@@ -58,6 +58,7 @@ export class IncidentRepository {
 				incidentEntity.description,
 				incidentEntity.regionId,
 				incidentEntity.communityId,
+				incidentEntity.createdUserId,
 				incidentEntity.id,
 				incidentEntity.createdAt,
 			);

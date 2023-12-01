@@ -8,6 +8,7 @@ import { Auth, RequestingUser } from 'shared/decorator';
 import { User } from 'model';
 import { UserRole } from 'entity/user.entity';
 import { UserPaginationRequest } from 'value_object/pagination_request';
+import { PermissionsService } from 'service/permissions';
 
 @Controller('users')
 @ApiTags('User')
@@ -15,6 +16,7 @@ export class UserController {
 	constructor(
 		private readonly userService: UserService,
 		private readonly userFormatter: UserFormatter,
+		private readonly permissionsService: PermissionsService,
 	) {}
 
 	// @Post('/register')
@@ -31,7 +33,7 @@ export class UserController {
 	@Auth(UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin)
 	@ApiResponse({ status: HttpStatus.OK, type: UserResponse })
 	public async createUser(@Body() body: CreateUserRequest, @RequestingUser() currentUser: User): Promise<UserResponse> {
-		this.userService.ensureCanManageUser(currentUser, {
+		this.permissionsService.ensureCanManageUser(currentUser, {
 			role: body.role,
 			regionId: body.regionId,
 			communityId: body.communityId,

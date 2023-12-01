@@ -3,9 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { UniTalkService } from 'service/unitalk';
 import { PaginationResponse } from 'value_object';
 import { IncidentPaginationRequest } from 'value_object/pagination_request';
-import { Incident, Community, Region } from 'model';
+import { Incident, Community, Region, User } from 'model';
 import { IncidentRepository } from 'repository';
-import { LocalityService } from '../locality';
+import { LocalityService } from 'service/locality';
+import { CreateIncidentRequest } from 'interface/apiRequest';
 
 export interface IncidentPaginationItem {
 	incident: Incident;
@@ -20,6 +21,12 @@ export class IncidentService {
 		private readonly incidentRepository: IncidentRepository,
 		private readonly localityService: LocalityService,
 	) {}
+
+	public async createIncident(body: CreateIncidentRequest, user: User): Promise<Incident> {
+		const incident = new Incident(body.address, body.description, body.regionId, body.communityId, user.id);
+
+		return this.incidentRepository.insertIncident(incident);
+	}
 
 	public async getAllIncidents(
 		paginationRequest: IncidentPaginationRequest,

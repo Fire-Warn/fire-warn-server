@@ -11,6 +11,7 @@ import {
 import { CommunityEntity } from './community.entity';
 import { RegionEntity } from './region.entity';
 import { CallEntity } from './call.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('incident')
 export class IncidentEntity {
@@ -41,6 +42,20 @@ export class IncidentEntity {
 		name: 'region_id',
 	})
 	regionId: number;
+
+	@ManyToOne(() => UserEntity, user => user.incidents, {
+		onDelete: 'CASCADE',
+		nullable: false,
+	})
+	@JoinColumn({ name: 'created_user_id' })
+	createdUser: UserEntity;
+
+	@RelationId((incident: IncidentEntity) => incident.createdUser)
+	@Column({
+		nullable: false,
+		name: 'created_user_id',
+	})
+	createdUserId: number;
 
 	@ManyToOne(() => CommunityEntity, community => community.incidents, {
 		onDelete: 'CASCADE',

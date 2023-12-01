@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SystemModule, UserModule, LocalityModule } from './module';
+import { SystemModule, UserModule, LocalityModule, IncidentModule } from './module';
 import configuration from 'config/configuration';
 import dbConfig from 'config/db.config';
 import { DatabaseConfig } from 'config/interfaces';
@@ -18,6 +18,7 @@ import { DatabaseConfig } from 'config/interfaces';
 		SystemModule,
 		UserModule,
 		LocalityModule,
+		IncidentModule,
 	],
 })
 export class AppModule {}

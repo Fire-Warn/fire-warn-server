@@ -64,3 +64,17 @@ export enum UserListOrderBy {
 export enum IncidentListOrderBy {
 	CreatedAt = 'incident.created_at',
 }
+
+export class CreateIncidentRequest {
+	@ApiProperty()
+	address: string;
+
+	@ApiProperty()
+	description: string;
+
+	@ApiProperty()
+	regionId: number;
+
+	@ApiProperty()
+	communityId: number;
+}
