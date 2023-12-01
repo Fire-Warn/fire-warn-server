@@ -36,4 +36,8 @@ export default () => ({
 			region: 'region',
 		},
 	},
+	uniTalk: {
+		apiKey: 'api-key',
+		voiceSettingsId: 226,
+	},
 });
