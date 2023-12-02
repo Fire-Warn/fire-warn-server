@@ -1,7 +1,7 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
-import { UserEntity } from 'entity/user.entity';
+import { UserEntity, UserRole } from 'entity/user.entity';
 import { User } from 'model';
 import { Result } from 'shared/util/util';
 import { UserPaginationRequest } from 'value_object/pagination_request';
@@ -67,6 +67,18 @@ export class UserRepository {
 			.execute();
 
 		return (await this.getById(raw[0].id)) as User;
+	}
+
+	public async getUsersByRolesAndCommunityId(roles: Array<UserRole>, communityId: number): Promise<Array<User>> {
+		const userEntities = await this.manager
+			.createQueryBuilder(UserEntity, 'user')
+			.where({
+				role: In(roles),
+				communityId,
+			})
+			.getMany();
+
+		return userEntities.map(userEntity => this.convertToModel(userEntity)) as Array<User>;
 	}
 
 	public convertToModel(userEntity?: UserEntity): Result<User> {

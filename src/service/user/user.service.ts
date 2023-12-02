@@ -86,6 +86,10 @@ export class UserService {
 		return user;
 	}
 
+	public async getUsersByRolesAndCommunityId(roles: Array<UserRole>, communityId: number): Promise<Array<User>> {
+		return this.userRepository.getUsersByRolesAndCommunityId(roles, communityId);
+	}
+
 	public generatePassword(): string {
 		return generate({
 			length: 12,

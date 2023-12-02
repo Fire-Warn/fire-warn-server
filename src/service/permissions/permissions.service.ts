@@ -1,6 +1,6 @@
 import { User } from 'model';
 import { UserRole } from 'entity/user.entity';
-import { ApplicationError } from '../../shared/error';
+import { ApplicationError } from 'shared/error';
 
 export interface UserRestrictionFields {
 	role: UserRole;

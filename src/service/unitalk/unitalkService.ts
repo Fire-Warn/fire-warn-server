@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import fetch, { RequestInit } from 'node-fetch';
 import { ConfigService } from '@nestjs/config';
 
-import { Audio, Call } from 'model';
+import { Audio } from 'model';
 import { AudioTtsResponse } from './types';
 import { UniTalkConfig } from 'config/interfaces';
+import { SMS } from '../../value_object/sms';
 
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -39,17 +40,29 @@ export class UniTalkService {
 		return audio;
 	}
 
-	public async enqueueCall(call: Call, audio: Audio): Promise<void> {
+	public async enqueueCall(to: string, audio: Audio): Promise<void> {
 		const path = 'calls/originateNew';
 
 		const body = {
-			phone: call.to,
+			phone: to,
 			meta: undefined, // can be used for webhooks
 			audios: [
 				{
 					id: audio.id,
 				},
 			],
+		};
+
+		await this.request(path, 'POST', body);
+	}
+
+	public async sendSMS(sms: SMS): Promise<void> {
+		const path = 'calls/originateNew';
+
+		const body = {
+			messageType: 'SMS',
+			to: sms.user.phone,
+			text: sms.text,
 		};
 
 		await this.request(path, 'POST', body);
