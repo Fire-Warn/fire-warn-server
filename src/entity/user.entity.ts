@@ -1,12 +1,24 @@
-import { CreateDateColumn, Entity, PrimaryGeneratedColumn, Column, ManyToOne, RelationId, JoinColumn } from 'typeorm';
+import {
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	ManyToOne,
+	RelationId,
+	JoinColumn,
+	OneToMany,
+} from 'typeorm';
 import { RegionEntity } from './region.entity';
 import { CommunityEntity } from './community.entity';
+import { IncidentEntity } from './incident.entity';
+import { CallEntity } from './call.entity';
 
 export enum UserRole {
 	Admin = 'Admin',
 	RegionalAdmin = 'RegionalAdmin',
 	CommunityAdmin = 'CommunityAdmin',
 	Volunteer = 'Volunteer',
+	Operator = 'Operator',
 }
 
 @Entity('user')
@@ -72,4 +84,10 @@ export class UserEntity {
 		name: 'community_id',
 	})
 	communityId: number;
+
+	@OneToMany(() => CallEntity, call => call.user, { cascade: true })
+	calls: CallEntity[];
+
+	@OneToMany(() => IncidentEntity, incident => incident.createdUser, { cascade: true })
+	incidents: IncidentEntity[];
 }

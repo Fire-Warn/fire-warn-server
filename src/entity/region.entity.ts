@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { CommunityEntity } from './community.entity';
 import { UserEntity } from './user.entity';
+import { IncidentEntity } from './incident.entity';
 
 @Entity('region')
 export class RegionEntity {
@@ -17,4 +18,7 @@ export class RegionEntity {
 
 	@OneToMany(() => UserEntity, user => user.region, { cascade: true })
 	users: UserEntity[];
+
+	@OneToMany(() => IncidentEntity, incident => incident.region, { cascade: true })
+	incidents: IncidentEntity[];
 }

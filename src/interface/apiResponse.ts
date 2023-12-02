@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from 'entity/user.entity';
+import { NEW_ID } from '../shared/util/util';
 
 export class UserResponse {
 	@ApiProperty()
@@ -78,4 +79,37 @@ export class RegionListResponse {
 export class CommunityListResponse {
 	@ApiProperty({ isArray: true, type: CommunityResponse })
 	list: Array<CommunityResponse>;
+}
+
+export class IncidentResponse {
+	@ApiProperty()
+	address: string;
+
+	@ApiProperty()
+	description: string;
+
+	@ApiProperty()
+	regionId: number;
+
+	@ApiProperty()
+	communityId: number;
+
+	@ApiProperty()
+	id: number;
+
+	@ApiProperty()
+	createdAt: Date;
+}
+
+export class IncidentListItemResponse extends IncidentResponse {
+	@ApiProperty({ type: CommunityResponse })
+	community: CommunityResponse;
+
+	@ApiProperty({ type: RegionResponse })
+	region: RegionResponse;
+}
+
+export class IncidentListResponse extends ListResponse {
+	@ApiProperty({ isArray: true, type: IncidentListItemResponse })
+	list: Array<IncidentListItemResponse>;
 }

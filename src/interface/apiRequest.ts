@@ -60,3 +60,15 @@ export enum UserListOrderBy {
 	CreatedAt = 'user.created_at',
 	Role = 'user.role',
 }
+
+export enum IncidentListOrderBy {
+	CreatedAt = 'incident.created_at',
+}
+
+export class CreateIncidentRequest {
+	@ApiProperty()
+	address: string;
+
+	@ApiProperty()
+	description: string;
+}

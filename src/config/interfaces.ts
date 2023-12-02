@@ -32,3 +32,8 @@ export interface S3Config {
 	postUrlTtl: number;
 	region: string;
 }
+
+export interface UniTalkConfig {
+	apiKey: 'cy6zhJUFcLeS';
+	voiceSettingsId: 226;
+}

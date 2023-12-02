@@ -12,12 +12,6 @@ import { ApplicationError } from 'shared/error';
 import { UserPaginationRequest } from 'value_object/pagination_request';
 import { PaginationResponse } from 'value_object';
 
-export interface UserRestrictionFields {
-	role: UserRole;
-	regionId: number;
-	communityId: number;
-}
-
 export interface UserPaginationItem {
 	user: User;
 	region: Region;
@@ -102,36 +96,6 @@ export class UserService {
 		});
 	}
 
-	public ensureCanManageUser(currentUser: User, managedUser: UserRestrictionFields): void {
-		switch (currentUser.role) {
-			case UserRole.Admin:
-				if (managedUser.role === UserRole.Admin) {
-					throw new MissingRolePermissionsError();
-				}
-				break;
-			case UserRole.RegionalAdmin:
-				if (
-					[UserRole.Admin, UserRole.RegionalAdmin].includes(managedUser.role) ||
-					([UserRole.CommunityAdmin || UserRole.Volunteer].includes(managedUser.role) &&
-						currentUser.regionId !== managedUser.regionId)
-				) {
-					throw new MissingRolePermissionsError();
-				}
-				break;
-			case UserRole.CommunityAdmin:
-				if (
-					[UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin].includes(managedUser.role) ||
-					(managedUser.role === UserRole.Volunteer && currentUser.regionId !== managedUser.regionId)
-				) {
-					throw new MissingRolePermissionsError();
-				}
-				break;
-			case UserRole.Volunteer:
-				// Volunteer can't manage any users
-				throw new MissingRolePermissionsError();
-		}
-	}
-
 	public async createUser(body: CreateUserRequest): Promise<User> {
 		await this.ensureUserNotExistByEmail(body.email);
 
@@ -180,5 +144,4 @@ export class UserService {
 
 export class UserNotFoundError extends ApplicationError {}
 export class UserAlreadyExistsError extends ApplicationError {}
-export class MissingRolePermissionsError extends ApplicationError {}
 export class UserNotFoundByEmailError extends ApplicationError {}
