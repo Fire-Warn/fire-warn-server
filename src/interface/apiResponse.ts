@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from 'entity/user.entity';
-import { NEW_ID } from '../shared/util/util';
 
 export class UserResponse {
 	@ApiProperty()

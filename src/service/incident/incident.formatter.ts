@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationResponse } from '../../value_object';
+
+import { PaginationResponse } from 'value_object';
 import { IncidentPaginationItem } from 'service/incident/incident.service';
-import { IncidentListResponse, IncidentResponse, UserListResponse } from '../../interface/apiResponse';
-import { LocalityFormatter } from '../locality';
-import { Incident } from '../../model';
+import { IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
+import { LocalityFormatter } from 'service/locality';
+import { Incident } from 'model';
 
 @Injectable()
 export class IncidentFormatter {
