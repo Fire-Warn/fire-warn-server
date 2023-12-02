@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import fetch, { RequestInit } from 'node-fetch';
 import { ConfigService } from '@nestjs/config';
 
-import { Audio } from 'model';
 import { AudioTtsResponse } from './types';
 import { UniTalkConfig } from 'config/interfaces';
-import { SMS } from '../../value_object/sms';
+import { SMS } from 'value_object/sms';
+import { Audio } from 'value_object/audio';
 
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 

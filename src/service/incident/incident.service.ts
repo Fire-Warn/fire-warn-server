@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { UniTalkService } from 'service/unitalk';
 import { PaginationResponse } from 'value_object';
 import { IncidentPaginationRequest } from 'value_object/pagination_request';
 import { Incident, Community, Region, User } from 'model';
@@ -17,7 +16,6 @@ export interface IncidentPaginationItem {
 @Injectable()
 export class IncidentService {
 	constructor(
-		private readonly uniTalkService: UniTalkService,
 		private readonly incidentRepository: IncidentRepository,
 		private readonly localityService: LocalityService,
 	) {}
