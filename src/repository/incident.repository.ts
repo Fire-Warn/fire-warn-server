@@ -45,6 +45,7 @@ export class IncidentRepository {
 				description: incident.description,
 				regionId: incident.regionId,
 				communityId: incident.communityId,
+				createdUserId: incident.createdUserId,
 			})
 			.execute();
 

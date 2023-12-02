@@ -23,7 +23,7 @@ export class IncidentService {
 	) {}
 
 	public async createIncident(body: CreateIncidentRequest, user: User): Promise<Incident> {
-		const incident = new Incident(body.address, body.description, body.regionId, body.communityId, user.id);
+		const incident = new Incident(body.address, body.description, user.regionId, user.communityId, user.id);
 
 		return this.incidentRepository.insertIncident(incident);
 	}

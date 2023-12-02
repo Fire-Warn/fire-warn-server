@@ -71,10 +71,4 @@ export class CreateIncidentRequest {
 
 	@ApiProperty()
 	description: string;
-
-	@ApiProperty()
-	regionId: number;
-
-	@ApiProperty()
-	communityId: number;
 }

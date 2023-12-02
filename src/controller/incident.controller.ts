@@ -20,13 +20,13 @@ export class IncidentController {
 	) {}
 
 	@Post('')
-	@Auth(UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin, UserRole.Operator)
+	@Auth(UserRole.Operator)
 	@ApiResponse({ status: HttpStatus.OK, type: IncidentResponse })
 	public async createIncident(
 		@Body() body: CreateIncidentRequest,
 		@RequestingUser() user: User,
 	): Promise<IncidentResponse> {
-		this.permissionsService.ensureCanManageIncident(user, { regionId: body.regionId, communityId: body.communityId });
+		this.permissionsService.ensureCanManageIncident(user, { regionId: user.regionId, communityId: user.communityId });
 
 		const incident = await this.incidentService.createIncident(body, user);
 
