@@ -114,6 +114,7 @@ export class AuthService {
 			Username: email, // TODO: Change to email
 			UserAttributes: [
 				{ Name: 'email_verified', Value: 'true' },
+				{ Name: 'send_email', Value: 'false' },
 				{ Name: 'email', Value: email },
 			],
 		};

@@ -23,11 +23,28 @@ export class UserResponse {
 	@ApiProperty()
 	regionId: number;
 
-	@ApiProperty()
-	communityId: number;
+	@ApiProperty({ nullable: true })
+	districtId?: number;
+
+	@ApiProperty({ nullable: true })
+	communityId?: number;
 }
 
 export class CommunityResponse {
+	@ApiProperty()
+	name: string;
+
+	@ApiProperty()
+	regionId: number;
+
+	@ApiProperty()
+	districtId: number;
+
+	@ApiProperty()
+	id: number;
+}
+
+export class DistrictResponse {
 	@ApiProperty()
 	name: string;
 
@@ -58,8 +75,11 @@ export class ListResponse {
 }
 
 export class UserListItemResponse extends UserResponse {
-	@ApiProperty({ type: CommunityResponse })
-	community: CommunityResponse;
+	@ApiProperty({ type: CommunityResponse, nullable: true })
+	community?: CommunityResponse;
+
+	@ApiProperty({ type: DistrictResponse, nullable: true })
+	district?: DistrictResponse;
 
 	@ApiProperty({ type: RegionResponse })
 	region: RegionResponse;
@@ -80,6 +100,11 @@ export class CommunityListResponse {
 	list: Array<CommunityResponse>;
 }
 
+export class DistrictListResponse {
+	@ApiProperty({ isArray: true, type: DistrictResponse })
+	list: Array<DistrictResponse>;
+}
+
 export class IncidentResponse {
 	@ApiProperty()
 	address: string;
@@ -89,6 +114,9 @@ export class IncidentResponse {
 
 	@ApiProperty()
 	regionId: number;
+
+	@ApiProperty()
+	districtId: number;
 
 	@ApiProperty()
 	communityId: number;
@@ -106,6 +134,9 @@ export class IncidentListItemResponse extends IncidentResponse {
 
 	@ApiProperty({ type: RegionResponse })
 	region: RegionResponse;
+
+	@ApiProperty({ type: DistrictResponse })
+	district: DistrictResponse;
 }
 
 export class IncidentListResponse extends ListResponse {

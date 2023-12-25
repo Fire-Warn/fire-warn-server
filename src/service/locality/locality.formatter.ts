@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { Community, Region } from 'model';
-import { CommunityResponse, RegionResponse } from 'interface/apiResponse';
+import { Community, District, Region } from 'model';
+import { CommunityResponse, DistrictResponse, RegionResponse } from 'interface/apiResponse';
 
 @Injectable()
 export class LocalityFormatter {
@@ -12,11 +12,20 @@ export class LocalityFormatter {
 		};
 	}
 
+	public toDistrictResponse(district: District): DistrictResponse {
+		return {
+			id: district.id,
+			name: district.name,
+			regionId: district.regionId,
+		};
+	}
+
 	public toCommunityResponse(community: Community): CommunityResponse {
 		return {
 			id: community.id,
 			name: community.name,
 			regionId: community.regionId,
+			districtId: community.districtId,
 		};
 	}
 }

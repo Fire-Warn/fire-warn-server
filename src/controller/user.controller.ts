@@ -9,6 +9,7 @@ import { User } from 'model';
 import { UserRole } from 'entity/user.entity';
 import { UserPaginationRequest } from 'value_object/pagination_request';
 import { PermissionsService } from 'service/permissions';
+import { LocalityService } from 'service/locality';
 
 @Controller('users')
 @ApiTags('User')
@@ -17,6 +18,7 @@ export class UserController {
 		private readonly userService: UserService,
 		private readonly userFormatter: UserFormatter,
 		private readonly permissionsService: PermissionsService,
+		private readonly localityService: LocalityService,
 	) {}
 
 	// @Post('/register')
@@ -36,8 +38,11 @@ export class UserController {
 		this.permissionsService.ensureCanManageUser(currentUser, {
 			role: body.role,
 			regionId: body.regionId,
+			districtId: body.districtId,
 			communityId: body.communityId,
 		});
+
+		// TODO: Ensure that community and distinct belongs to the region
 
 		const user = await this.userService.createUser(body);
 
@@ -60,6 +65,7 @@ export class UserController {
 	@ApiQuery({ name: 'filters', isArray: true, type: String, required: false })
 	@ApiResponse({ status: HttpStatus.OK, type: UserListResponse })
 	public async getAllUsers(
+		@RequestingUser() user: User,
 		@Query('page', ParseIntPipe) page: number,
 		@Query('rowsPerPage', ParseIntPipe) rowsPerPage: number,
 		@Query('order') order: Order = Order.Desc,
@@ -74,7 +80,7 @@ export class UserController {
 			orderBy,
 		);
 
-		const result = await this.userService.getAllUsers(paginationRequest);
+		const result = await this.userService.getAllUsers(paginationRequest, user);
 
 		return this.userFormatter.toUserListResponse(result);
 	}

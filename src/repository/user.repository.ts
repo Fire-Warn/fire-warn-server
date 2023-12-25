@@ -50,6 +50,12 @@ export class UserRepository {
 		return count > 0;
 	}
 
+	public async checkUserExistsByPhone(phone: string): Promise<boolean> {
+		const count = await this.manager.createQueryBuilder(UserEntity, 'user').where({ phone }).getCount();
+
+		return count > 0;
+	}
+
 	public async insertUser(user: User): Promise<User> {
 		const { raw } = await this.manager
 			.createQueryBuilder()
@@ -62,7 +68,8 @@ export class UserRepository {
 				role: user.role,
 				phone: user.phone,
 				regionId: user.regionId,
-				communityId: user.communityId,
+				districtId: user.districtId || undefined,
+				communityId: user.communityId || undefined,
 			})
 			.execute();
 
@@ -90,6 +97,7 @@ export class UserRepository {
 				userEntity.lastName,
 				userEntity.role,
 				userEntity.regionId,
+				userEntity.districtId,
 				userEntity.communityId,
 				userEntity.id,
 			);

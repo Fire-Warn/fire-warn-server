@@ -5,7 +5,7 @@ import { AuthService } from 'service/auth';
 import { UserService, UserFormatter } from 'service/user';
 import { LocalityFormatter, LocalityService } from 'service/locality';
 import { PermissionsService } from 'service/permissions';
-import { CommunityRepository, RegionRepository, UserRepository } from 'repository';
+import { CommunityRepository, DistrictRepository, RegionRepository, UserRepository } from 'repository';
 import { AuthModule } from './auth.module';
 
 @Module({
@@ -19,6 +19,7 @@ import { AuthModule } from './auth.module';
 		LocalityService,
 		LocalityFormatter,
 		RegionRepository,
+		DistrictRepository,
 		CommunityRepository,
 		PermissionsService,
 	],

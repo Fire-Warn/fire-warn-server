@@ -10,6 +10,8 @@ import { IncidentPaginationRequest } from 'value_object/pagination_request';
 import { User } from 'model';
 import { UserService } from 'service/user';
 import { MessagingService } from 'service/messaging';
+import { LocalityService } from 'service/locality';
+import { PermissionsService } from 'service/permissions';
 
 @Controller('incidents')
 @ApiTags('Incident')
@@ -19,6 +21,8 @@ export class IncidentController {
 		private readonly incidentFormatter: IncidentFormatter,
 		private readonly userService: UserService,
 		private readonly messagingService: MessagingService,
+		private readonly localityService: LocalityService,
+		private readonly permissionsService: PermissionsService,
 	) {}
 
 	@Post('')
@@ -28,14 +32,17 @@ export class IncidentController {
 		@Body() body: CreateIncidentRequest,
 		@RequestingUser() user: User,
 	): Promise<IncidentResponse> {
+		const community = await this.localityService.getCommunityById(body.communityId);
+		this.permissionsService.ensureOperatorCanManageCommunityIncident(user, community);
+
 		const incident = await this.incidentService.createIncident(body, user);
 
 		const communityVolunteers = await this.userService.getUsersByRolesAndCommunityId(
 			[UserRole.Volunteer],
-			user.communityId,
+			body.communityId,
 		);
 
-		// await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
+		await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
 		await this.messagingService.enqueueIncidentCalls(incident, communityVolunteers);
 
 		return this.incidentFormatter.toIncidentResponse(incident);

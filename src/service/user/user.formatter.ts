@@ -18,17 +18,19 @@ export class UserFormatter {
 			lastName: user.lastName,
 			role: user.role,
 			regionId: user.regionId,
+			districtId: user.districtId,
 			communityId: user.communityId,
 		};
 	}
 
 	public toUserListResponse(userPaginationResponse: PaginationResponse<UserPaginationItem>): UserListResponse {
 		return {
-			list: userPaginationResponse.list.map(({ user, region, community }) => {
+			list: userPaginationResponse.list.map(({ user, region, district, community }) => {
 				return {
 					...this.toUserResponse(user),
 					region: this.localityFormatter.toRegionResponse(region),
-					community: this.localityFormatter.toCommunityResponse(community),
+					district: district && this.localityFormatter.toDistrictResponse(district),
+					community: community && this.localityFormatter.toCommunityResponse(community),
 				};
 			}),
 			page: userPaginationResponse.page,

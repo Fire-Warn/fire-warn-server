@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, RelationId, OneToMan
 import { RegionEntity } from './region.entity';
 import { UserEntity } from './user.entity';
 import { IncidentEntity } from './incident.entity';
+import { DistrictEntity } from './district.entity';
 
 @Entity('community')
 export class CommunityEntity {
@@ -26,6 +27,20 @@ export class CommunityEntity {
 		name: 'region_id',
 	})
 	regionId: number;
+
+	@ManyToOne(() => DistrictEntity, district => district.communities, {
+		onDelete: 'CASCADE',
+		nullable: false,
+	})
+	@JoinColumn({ name: 'district_id' })
+	district: DistrictEntity;
+
+	@RelationId((community: CommunityEntity) => community.district)
+	@Column({
+		nullable: false,
+		name: 'district_id',
+	})
+	districtId: number;
 
 	@OneToMany(() => UserEntity, user => user.community, { cascade: true })
 	users: UserEntity[];

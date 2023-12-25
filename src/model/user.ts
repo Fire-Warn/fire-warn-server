@@ -9,7 +9,8 @@ export class User {
 		public readonly lastName: string,
 		public readonly role: UserRole,
 		public readonly regionId: number,
-		public readonly communityId: number,
+		public readonly districtId?: number, // NULL for Admin, Regional Admin
+		public readonly communityId?: number, // NULL for Admin, Regional Admin, Operator
 		public readonly id: number = NEW_ID,
 	) {}
 

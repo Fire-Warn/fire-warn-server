@@ -22,7 +22,12 @@ export class MessagingService {
 		const enqueueCallsAsyncAction = new AsyncAction('enqueue:calls:async:action', async () => {
 			await Promise.all(
 				users.map(async user => {
-					const call = new Call('', CallStatus.NotInitiated, incident.id, user.id);
+					const call = new Call(
+						`incident:${incident.id}-user:${user.id}`,
+						CallStatus.NotInitiated,
+						incident.id,
+						user.id,
+					);
 					await this.callRepository.insert(call);
 
 					await this.uniTalkService.enqueueCall(user.phone, audio);

@@ -5,8 +5,14 @@ import { IncidentFormatter, IncidentService } from 'service/incident';
 import { UniTalkService } from 'service/unitalk';
 import { AuthModule } from './auth.module';
 import { PermissionsService } from 'service/permissions';
-import { CallRepository, IncidentRepository } from 'repository';
-import { LocalityFormatter } from 'service/locality';
+import {
+	CallRepository,
+	CommunityRepository,
+	DistrictRepository,
+	IncidentRepository,
+	RegionRepository,
+} from 'repository';
+import { LocalityFormatter, LocalityService } from 'service/locality';
 import { MessagingService } from 'service/messaging';
 
 @Module({
@@ -21,6 +27,10 @@ import { MessagingService } from 'service/messaging';
 		LocalityFormatter,
 		MessagingService,
 		CallRepository,
+		LocalityService,
+		RegionRepository,
+		DistrictRepository,
+		CommunityRepository,
 	],
 })
 export class IncidentModule {}

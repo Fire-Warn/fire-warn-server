@@ -1,15 +1,17 @@
-import { User } from 'model';
+import { Community, User } from 'model';
 import { UserRole } from 'entity/user.entity';
 import { ApplicationError } from 'shared/error';
 
 export interface UserRestrictionFields {
 	role: UserRole;
 	regionId: number;
-	communityId: number;
+	districtId?: number;
+	communityId?: number;
 }
 
 export interface IncidentRestrictionFields {
 	regionId: number;
+	districtId: number;
 	communityId: number;
 }
 
@@ -33,7 +35,7 @@ export class PermissionsService {
 			case UserRole.CommunityAdmin:
 				if (
 					[UserRole.Admin, UserRole.RegionalAdmin, UserRole.CommunityAdmin, UserRole.Operator].includes(user.role) ||
-					(user.role === UserRole.Volunteer && currentUser.regionId !== user.regionId)
+					(user.role === UserRole.Volunteer && currentUser.communityId !== user.communityId)
 				) {
 					throw new MissingRolePermissionsError();
 				}
@@ -66,6 +68,12 @@ export class PermissionsService {
 			}
 			case UserRole.Volunteer:
 				throw new MissingRolePermissionsError();
+		}
+	}
+
+	public ensureOperatorCanManageCommunityIncident(operator: User, community: Community): void {
+		if (operator.districtId !== community.districtId) {
+			throw new MissingRolePermissionsError();
 		}
 	}
 }

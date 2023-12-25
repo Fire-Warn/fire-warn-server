@@ -44,6 +44,7 @@ export class IncidentRepository {
 				address: incident.address,
 				description: incident.description,
 				regionId: incident.regionId,
+				districtId: incident.districtId,
 				communityId: incident.communityId,
 				createdUserId: incident.createdUserId,
 			})
@@ -58,6 +59,7 @@ export class IncidentRepository {
 				incidentEntity.address,
 				incidentEntity.description,
 				incidentEntity.regionId,
+				incidentEntity.districtId,
 				incidentEntity.communityId,
 				incidentEntity.createdUserId,
 				incidentEntity.id,

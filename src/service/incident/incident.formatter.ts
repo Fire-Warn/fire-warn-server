@@ -16,6 +16,7 @@ export class IncidentFormatter {
 			address: incident.address,
 			description: incident.description,
 			regionId: incident.regionId,
+			districtId: incident.districtId,
 			communityId: incident.communityId,
 			createdAt: incident.createdAt,
 		};
@@ -25,10 +26,11 @@ export class IncidentFormatter {
 		incidentPaginationResponse: PaginationResponse<IncidentPaginationItem>,
 	): IncidentListResponse {
 		return {
-			list: incidentPaginationResponse.list.map(({ incident, region, community }) => {
+			list: incidentPaginationResponse.list.map(({ incident, region, district, community }) => {
 				return {
 					...this.toIncidentResponse(incident),
 					region: this.localityFormatter.toRegionResponse(region),
+					district: this.localityFormatter.toDistrictResponse(district),
 					community: this.localityFormatter.toCommunityResponse(community),
 				};
 			}),

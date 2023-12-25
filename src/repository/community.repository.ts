@@ -33,9 +33,20 @@ export class CommunityRepository {
 		return communityEntities.map(communityEntity => this.convertToModel(communityEntity) as Community);
 	}
 
+	public async getByDistrictId(districtId: number): Promise<Array<Community>> {
+		const communityEntities = await this.manager.find(CommunityEntity, { where: { districtId } });
+
+		return communityEntities.map(communityEntity => this.convertToModel(communityEntity) as Community);
+	}
+
 	public convertToModel(communityEntity?: CommunityEntity): Result<Community> {
 		if (communityEntity) {
-			return new Community(communityEntity.name, communityEntity.regionId, communityEntity.id);
+			return new Community(
+				communityEntity.name,
+				communityEntity.regionId,
+				communityEntity.districtId,
+				communityEntity.id,
+			);
 		}
 	}
 }

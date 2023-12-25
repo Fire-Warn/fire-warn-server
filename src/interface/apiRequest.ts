@@ -28,6 +28,9 @@ export class RegisterUserRequest {
 	regionId: number;
 
 	@ApiProperty()
+	districtId: number;
+
+	@ApiProperty()
 	communityId: number;
 }
 
@@ -50,8 +53,11 @@ export class CreateUserRequest {
 	@ApiProperty()
 	regionId: number;
 
-	@ApiProperty()
-	communityId: number;
+	@ApiProperty({ required: false })
+	districtId?: number;
+
+	@ApiProperty({ required: false })
+	communityId?: number;
 }
 
 export enum UserListOrderBy {
@@ -71,4 +77,7 @@ export class CreateIncidentRequest {
 
 	@ApiProperty()
 	description: string;
+
+	@ApiProperty()
+	communityId: number;
 }

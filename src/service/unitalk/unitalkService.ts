@@ -57,7 +57,7 @@ export class UniTalkService {
 	}
 
 	public async sendSMS(sms: SMS): Promise<void> {
-		const path = 'calls/originateNew';
+		const path = 'message/send';
 
 		const body = {
 			messageType: 'SMS',

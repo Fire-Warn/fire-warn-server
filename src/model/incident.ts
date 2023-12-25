@@ -5,6 +5,7 @@ export class Incident {
 		public readonly address: string,
 		public readonly description: string,
 		public readonly regionId: number,
+		public readonly districtId: number,
 		public readonly communityId: number,
 		public readonly createdUserId: number,
 		public readonly id = NEW_ID,

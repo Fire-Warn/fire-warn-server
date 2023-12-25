@@ -12,6 +12,7 @@ import { RegionEntity } from './region.entity';
 import { CommunityEntity } from './community.entity';
 import { IncidentEntity } from './incident.entity';
 import { CallEntity } from './call.entity';
+import { DistrictEntity } from './district.entity';
 
 export enum UserRole {
 	Admin = 'Admin',
@@ -71,19 +72,33 @@ export class UserEntity {
 	})
 	regionId: number;
 
+	@ManyToOne(() => DistrictEntity, district => district.users, {
+		onDelete: 'CASCADE',
+		nullable: true,
+	})
+	@JoinColumn({ name: 'district_id' })
+	district?: DistrictEntity;
+
+	@RelationId((user: UserEntity) => user.district)
+	@Column({
+		nullable: true,
+		name: 'district_id',
+	})
+	districtId?: number;
+
 	@ManyToOne(() => CommunityEntity, community => community.users, {
 		onDelete: 'CASCADE',
-		nullable: false,
+		nullable: true,
 	})
 	@JoinColumn({ name: 'community_id' })
-	community: CommunityEntity;
+	community?: CommunityEntity;
 
 	@RelationId((user: UserEntity) => user.community)
 	@Column({
-		nullable: false,
+		nullable: true,
 		name: 'community_id',
 	})
-	communityId: number;
+	communityId?: number;
 
 	@OneToMany(() => CallEntity, call => call.user, { cascade: true })
 	calls: CallEntity[];
