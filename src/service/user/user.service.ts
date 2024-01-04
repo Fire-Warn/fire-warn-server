@@ -147,6 +147,9 @@ export class UserService {
 		const userPaginationResponse = await this.userRepository.getAllUsers(paginationRequest);
 
 		const regionIds = Array.from(new Set(userPaginationResponse.list.map(u => u.regionId)));
+		const districtIds = Array.from(
+			new Set(userPaginationResponse.list.map(u => u.districtId).filter(districtId => !!districtId) as Array<number>),
+		);
 		const communityIds = Array.from(
 			new Set(
 				userPaginationResponse.list.map(u => u.communityId).filter(communityId => !!communityId) as Array<number>,
@@ -154,6 +157,7 @@ export class UserService {
 		);
 
 		const regions = await this.localityService.getRegionByIds(regionIds);
+		const districts = await this.localityService.getDistrictsByIds(districtIds);
 		const communities = await this.localityService.getCommunityByIds(communityIds);
 
 		return new PaginationResponse<UserPaginationItem>(
@@ -162,11 +166,13 @@ export class UserService {
 			userPaginationResponse.total,
 			userPaginationResponse.list.map(user => {
 				const region = regions.find(r => r.id === user.regionId) as Region;
+				const district = districts.find(d => d.id === user.districtId) as District;
 				const community = communities.find(c => c.id === user.communityId) as Community;
 
 				return {
 					user,
 					region,
+					district,
 					community,
 				};
 			}),

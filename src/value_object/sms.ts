@@ -7,8 +7,13 @@ export class SMS {
 	) {}
 
 	public get text(): string {
-		return `Доброго дня, ${this.user.firstName} ${this.user.lastName}! 
+		const text = `Доброго дня, ${this.user.firstName} ${this.user.lastName}! 
 		Новий інцидент за адресою "${this.incident.address}". 
 		Опис інциденту: ${this.incident.description}`;
+
+		return text
+			.split(`\n`)
+			.map(l => l.trim())
+			.join('\n');
 	}
 }
