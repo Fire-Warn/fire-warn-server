@@ -42,7 +42,7 @@ export class IncidentController {
 			body.communityId,
 		);
 
-		await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
+		// await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
 		await this.messagingService.enqueueIncidentCalls(incident, communityVolunteers);
 
 		return this.incidentFormatter.toIncidentResponse(incident);

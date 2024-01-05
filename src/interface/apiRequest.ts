@@ -81,3 +81,37 @@ export class CreateIncidentRequest {
 	@ApiProperty()
 	communityId: number;
 }
+
+export class UnitalkCallNewRequest {
+	@ApiProperty()
+	event: 'CALL_NEW';
+
+	@ApiProperty()
+	call: { meta?: string } & Record<string, any>;
+}
+
+export class UnitalkCallAnswerRequest {
+	@ApiProperty()
+	event: 'CALL_ANSWER';
+
+	@ApiProperty()
+	call: { meta?: string } & Record<string, any>;
+}
+
+export class UnitalkCallEndedRequest {
+	@ApiProperty()
+	event: 'CALL_ENDED';
+
+	@ApiProperty()
+	call: { meta?: string } & Record<string, any>;
+}
+
+export class UnitalkIvrActionRequest {
+	@ApiProperty()
+	event: 'IVR_ACTION';
+
+	@ApiProperty()
+	meta?: string;
+
+	pressedDigit: number;
+}

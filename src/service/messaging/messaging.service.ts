@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { Call, Incident, User } from 'model';
-import { UniTalkService } from 'service/unitalk';
-import { CallStatus } from 'entity/call.entity';
+import { UnitalkService } from 'service/unitalk';
+import { CallStatus, IvrInteraction } from 'entity/call.entity';
 import { CallRepository } from 'repository';
 import { SMS } from 'value_object/sms';
 import { Audio } from 'value_object/audio';
@@ -11,7 +11,7 @@ import { AsyncAction } from 'shared/async_action';
 @Injectable()
 export class MessagingService {
 	constructor(
-		private readonly uniTalkService: UniTalkService,
+		private readonly uniTalkService: UnitalkService,
 		private readonly callRepository: CallRepository,
 	) {}
 
@@ -22,15 +22,16 @@ export class MessagingService {
 		const enqueueCallsAsyncAction = new AsyncAction('enqueue:calls:async:action', async () => {
 			await Promise.all(
 				users.map(async user => {
-					const call = new Call(
+					let call = new Call(
 						`incident:${incident.id}-user:${user.id}`,
 						CallStatus.NotInitiated,
+						IvrInteraction.Ignored,
 						incident.id,
 						user.id,
 					);
-					await this.callRepository.insert(call);
+					call = await this.callRepository.insert(call);
 
-					await this.uniTalkService.enqueueCall(user.phone, audio);
+					await this.uniTalkService.enqueueCall(user.phone, audio, { callId: call.id });
 				}),
 			);
 		});

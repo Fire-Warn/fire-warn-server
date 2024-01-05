@@ -10,7 +10,7 @@ import { Audio } from 'value_object/audio';
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 @Injectable()
-export class UniTalkService {
+export class UnitalkService {
 	private config: UniTalkConfig;
 
 	constructor(private readonly configService: ConfigService) {
@@ -40,12 +40,13 @@ export class UniTalkService {
 		return audio;
 	}
 
-	public async enqueueCall(to: string, audio: Audio): Promise<void> {
+	public async enqueueCall(to: string, audio: Audio, meta?: Record<string, any>): Promise<void> {
 		const path = 'calls/originateNew';
 
 		const body = {
 			phone: to,
-			meta: undefined, // can be used for webhooks
+			meta: JSON.stringify(meta), // can be used for webhooks
+			ivrId: 1240,
 			audios: [
 				{
 					id: audio.id,

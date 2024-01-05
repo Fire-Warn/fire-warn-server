@@ -9,6 +9,12 @@ export enum CallStatus {
 	Hangup = 'Hangup',
 }
 
+export enum IvrInteraction {
+	Accepted = 'Accepted',
+	Denied = 'Denied',
+	Ignored = 'Ignored',
+}
+
 @Entity('call')
 export class CallEntity {
 	@PrimaryGeneratedColumn()
@@ -24,6 +30,14 @@ export class CallEntity {
 		enum: CallStatus,
 	})
 	status: CallStatus;
+
+	@Column({
+		name: 'ivr_interaction',
+		type: 'enum',
+		enum: IvrInteraction,
+		default: IvrInteraction.Ignored,
+	})
+	ivrInteraction: IvrInteraction;
 
 	@Column({
 		type: 'timestamp',
