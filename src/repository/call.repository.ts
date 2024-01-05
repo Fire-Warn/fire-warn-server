@@ -28,6 +28,17 @@ export class CallRepository {
 		return this.convertToModel(callEntity);
 	}
 
+	public async getIncidentAcceptedUserIds(incidentId: number): Promise<Array<number>> {
+		const rawResult = await this.manager
+			.createQueryBuilder(CallEntity, 'call')
+			.select('call.user_id')
+			.where('call.incident_id = :incidentId', { incidentId })
+			.andWhere('call.ivr_interaction = :accepted', { accepted: IvrInteraction.Accepted })
+			.getRawMany<{ user_id: number }>();
+
+		return rawResult.map(raw => raw.user_id);
+	}
+
 	public async insert(call: Call): Promise<Call> {
 		const { raw } = await this.manager
 			.createQueryBuilder()

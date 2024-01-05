@@ -6,6 +6,7 @@ import { Incident, Community, Region, User, District } from 'model';
 import { IncidentRepository } from 'repository';
 import { LocalityService } from 'service/locality';
 import { CreateIncidentRequest } from 'interface/apiRequest';
+import { ApplicationError } from 'shared/error';
 
 export interface IncidentPaginationItem {
 	incident: Incident;
@@ -20,6 +21,16 @@ export class IncidentService {
 		private readonly incidentRepository: IncidentRepository,
 		private readonly localityService: LocalityService,
 	) {}
+
+	public async getById(id: number): Promise<Incident> {
+		const incident = await this.incidentRepository.getById(id);
+
+		if (!incident) {
+			throw new IncidentNotExistsError();
+		}
+
+		return incident;
+	}
 
 	public async createIncident(body: CreateIncidentRequest, user: User): Promise<Incident> {
 		const community = await this.localityService.getCommunityById(body.communityId);
@@ -67,3 +78,5 @@ export class IncidentService {
 		);
 	}
 }
+
+export class IncidentNotExistsError extends ApplicationError {}

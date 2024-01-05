@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 
 import { PaginationResponse } from 'value_object';
 import { IncidentPaginationItem } from 'service/incident/incident.service';
-import { IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
+import { IncidentDetailsResponse, IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
 import { LocalityFormatter } from 'service/locality';
-import { Incident } from 'model';
+import { Incident, User } from 'model';
+import { UserFormatter } from 'service/user';
 
 @Injectable()
 export class IncidentFormatter {
-	constructor(private readonly localityFormatter: LocalityFormatter) {}
+	constructor(
+		private readonly localityFormatter: LocalityFormatter,
+		private readonly userFormatter: UserFormatter,
+	) {}
 
 	public toIncidentResponse(incident: Incident): IncidentResponse {
 		return {
@@ -19,6 +23,21 @@ export class IncidentFormatter {
 			districtId: incident.districtId,
 			communityId: incident.communityId,
 			createdAt: incident.createdAt,
+		};
+	}
+
+	public toIncidentDetailsResponse(
+		incident: Incident,
+		volunteers: Array<User>,
+		incidentAcceptedUserIds: Array<number>,
+	): IncidentDetailsResponse {
+		const acceptedVolunteers = volunteers.filter(volunteer => incidentAcceptedUserIds.includes(volunteer.id));
+		const notAcceptedVolunteers = volunteers.filter(volunteer => !incidentAcceptedUserIds.includes(volunteer.id));
+
+		return {
+			...this.toIncidentResponse(incident),
+			acceptedVolunteers: acceptedVolunteers.map(v => this.userFormatter.toUserResponse(v)),
+			notAcceptedVolunteers: notAcceptedVolunteers.map(v => this.userFormatter.toUserResponse(v)),
 		};
 	}
 

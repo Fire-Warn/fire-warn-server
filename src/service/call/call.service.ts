@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { Call } from '../../model';
-import { CallStatus, IvrInteraction } from '../../entity/call.entity';
-import { CallRepository } from '../../repository';
-import { ApplicationError } from '../../shared/error';
+import { Call, Incident } from 'model';
+import { CallStatus, IvrInteraction } from 'entity/call.entity';
+import { CallRepository } from 'repository';
+import { ApplicationError } from 'shared/error';
 
 @Injectable()
 export class CallService {
@@ -27,6 +27,10 @@ export class CallService {
 		}
 
 		return call;
+	}
+
+	public async getIncidentAcceptedUserIds(incident: Incident): Promise<Array<number>> {
+		return this.callRepository.getIncidentAcceptedUserIds(incident.id);
 	}
 
 	public async update(call: Call): Promise<Call> {

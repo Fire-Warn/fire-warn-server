@@ -128,6 +128,14 @@ export class IncidentResponse {
 	createdAt: Date;
 }
 
+export class IncidentDetailsResponse extends IncidentResponse {
+	@ApiProperty({ type: UserResponse, isArray: true })
+	acceptedVolunteers: Array<UserResponse>;
+
+	@ApiProperty({ type: UserResponse, isArray: true })
+	notAcceptedVolunteers: Array<UserResponse>;
+}
+
 export class IncidentListItemResponse extends IncidentResponse {
 	@ApiProperty({ type: CommunityResponse })
 	community: CommunityResponse;

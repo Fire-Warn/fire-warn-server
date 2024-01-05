@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpStatus, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
+import { IncidentDetailsResponse, IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
 import { IncidentFormatter, IncidentService } from 'service/incident';
 import { Auth, RequestingUser } from 'shared/decorator';
 import { UserRole } from 'entity/user.entity';
@@ -12,6 +12,7 @@ import { UserService } from 'service/user';
 import { MessagingService } from 'service/messaging';
 import { LocalityService } from 'service/locality';
 import { PermissionsService } from 'service/permissions';
+import { CallService } from 'service/call';
 
 @Controller('incidents')
 @ApiTags('Incident')
@@ -23,6 +24,7 @@ export class IncidentController {
 		private readonly messagingService: MessagingService,
 		private readonly localityService: LocalityService,
 		private readonly permissionsService: PermissionsService,
+		private readonly callService: CallService,
 	) {}
 
 	@Post('')
@@ -38,14 +40,35 @@ export class IncidentController {
 		const incident = await this.incidentService.createIncident(body, user);
 
 		const communityVolunteers = await this.userService.getUsersByRolesAndCommunityId(
-			[UserRole.Volunteer],
+			[UserRole.Volunteer, UserRole.CommunityAdmin],
 			body.communityId,
 		);
 
-		// await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
+		await this.messagingService.sendIncidentSMSs(incident, communityVolunteers);
 		await this.messagingService.enqueueIncidentCalls(incident, communityVolunteers);
 
 		return this.incidentFormatter.toIncidentResponse(incident);
+	}
+
+	@Get(':id')
+	@Auth(UserRole.Admin, UserRole.RegionalAdmin, UserRole.RegionalAdmin, UserRole.Operator)
+	@ApiResponse({ status: HttpStatus.OK, type: IncidentDetailsResponse })
+	public async getIncidentDetails(
+		@RequestingUser() user: User,
+		@Param('id', ParseIntPipe) id: number,
+	): Promise<IncidentDetailsResponse> {
+		const incident = await this.incidentService.getById(id);
+		this.permissionsService.ensureCanManageIncident(user, incident);
+
+		// TODO: Change to approach based on calls because this approach won't work when volunteers are added and deleted
+		const communityVolunteers = await this.userService.getUsersByRolesAndCommunityId(
+			[UserRole.Volunteer, UserRole.CommunityAdmin],
+			incident.communityId,
+		);
+
+		const incidentAcceptedUserIds = await this.callService.getIncidentAcceptedUserIds(incident);
+
+		return this.incidentFormatter.toIncidentDetailsResponse(incident, communityVolunteers, incidentAcceptedUserIds);
 	}
 
 	@Get()

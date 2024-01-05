@@ -14,6 +14,8 @@ import {
 } from 'repository';
 import { LocalityFormatter, LocalityService } from 'service/locality';
 import { MessagingService } from 'service/messaging';
+import { UserFormatter } from 'service/user';
+import { CallService } from 'service/call';
 
 @Module({
 	imports: [AuthModule],
@@ -31,6 +33,8 @@ import { MessagingService } from 'service/messaging';
 		RegionRepository,
 		DistrictRepository,
 		CommunityRepository,
+		UserFormatter,
+		CallService,
 	],
 })
 export class IncidentModule {}

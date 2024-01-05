@@ -60,7 +60,7 @@ export class UniTalkWebhookHandlerService {
 
 				const call = await this.callService.getById(meta?.callId);
 
-				call.status = CallStatus.Answered;
+				call.status = CallStatus.Hangup;
 				call.hungupdAt = new Date();
 
 				await this.callService.update(call);
