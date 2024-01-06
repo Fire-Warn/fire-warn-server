@@ -59,9 +59,14 @@ export class PermissionsService {
 				}
 				break;
 			}
-			case UserRole.CommunityAdmin:
-			case UserRole.Operator: {
+			case UserRole.CommunityAdmin: {
 				if (currentUser.regionId !== incident.regionId || currentUser.communityId !== incident.communityId) {
+					throw new MissingRolePermissionsError();
+				}
+				break;
+			}
+			case UserRole.Operator: {
+				if (currentUser.regionId !== incident.regionId || currentUser.districtId !== incident.districtId) {
 					throw new MissingRolePermissionsError();
 				}
 				break;

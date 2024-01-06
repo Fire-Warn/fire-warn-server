@@ -4,7 +4,7 @@ import { PaginationResponse } from 'value_object';
 import { IncidentPaginationItem } from 'service/incident/incident.service';
 import { IncidentDetailsResponse, IncidentListResponse, IncidentResponse } from 'interface/apiResponse';
 import { LocalityFormatter } from 'service/locality';
-import { Incident, User } from 'model';
+import { Community, District, Incident, Region, User } from 'model';
 import { UserFormatter } from 'service/user';
 
 @Injectable()
@@ -30,6 +30,9 @@ export class IncidentFormatter {
 		incident: Incident,
 		volunteers: Array<User>,
 		incidentAcceptedUserIds: Array<number>,
+		region: Region,
+		district: District,
+		community: Community,
 	): IncidentDetailsResponse {
 		const acceptedVolunteers = volunteers.filter(volunteer => incidentAcceptedUserIds.includes(volunteer.id));
 		const notAcceptedVolunteers = volunteers.filter(volunteer => !incidentAcceptedUserIds.includes(volunteer.id));
@@ -38,6 +41,9 @@ export class IncidentFormatter {
 			...this.toIncidentResponse(incident),
 			acceptedVolunteers: acceptedVolunteers.map(v => this.userFormatter.toUserResponse(v)),
 			notAcceptedVolunteers: notAcceptedVolunteers.map(v => this.userFormatter.toUserResponse(v)),
+			region: this.localityFormatter.toRegionResponse(region),
+			district: this.localityFormatter.toDistrictResponse(district),
+			community: this.localityFormatter.toCommunityResponse(community),
 		};
 	}
 

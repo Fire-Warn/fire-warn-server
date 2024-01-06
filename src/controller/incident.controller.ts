@@ -68,7 +68,18 @@ export class IncidentController {
 
 		const incidentAcceptedUserIds = await this.callService.getIncidentAcceptedUserIds(incident);
 
-		return this.incidentFormatter.toIncidentDetailsResponse(incident, communityVolunteers, incidentAcceptedUserIds);
+		const region = await this.localityService.getRegionById(incident.regionId);
+		const district = await this.localityService.getDistrictById(incident.districtId);
+		const community = await this.localityService.getCommunityById(incident.communityId);
+
+		return this.incidentFormatter.toIncidentDetailsResponse(
+			incident,
+			communityVolunteers,
+			incidentAcceptedUserIds,
+			region,
+			district,
+			community,
+		);
 	}
 
 	@Get()

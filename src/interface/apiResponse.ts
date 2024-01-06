@@ -134,6 +134,15 @@ export class IncidentDetailsResponse extends IncidentResponse {
 
 	@ApiProperty({ type: UserResponse, isArray: true })
 	notAcceptedVolunteers: Array<UserResponse>;
+
+	@ApiProperty({ type: RegionResponse })
+	region: RegionResponse;
+
+	@ApiProperty({ type: DistrictResponse })
+	district: DistrictResponse;
+
+	@ApiProperty({ type: CommunityResponse })
+	community: CommunityResponse;
 }
 
 export class IncidentListItemResponse extends IncidentResponse {
